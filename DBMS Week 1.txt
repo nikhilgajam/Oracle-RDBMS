@@ -1,0 +1,124 @@
+/* 
+
+WEEK 1:
+
+Database Schema for a customer-sale scenario 
+Customer(Cust id : integer, cust_name: string) 
+Item(item_id: integer,item_name: string, price: integer) 
+Sale(bill_no: integer, bill_data: date, cust_id: integer, item_id: integer, qty_sold: integer) 
+
+For the above schema, perform the following—
+
+a) Create the tables with the appropriate integrity constraints 
+b) Insert around 10 records in each of the tables 
+c) List all the bills for the current date with the customer names and item numbers 
+d) List the total Bill details with the quantity sold, price of the item and the final amount 
+e) List the details of the customer who have bought a product which has a price>200 
+f) Give a count of how many products have been bought by each customer 
+g) Give a list of products bought by a customer having cust_id as 5 
+h) List the item details which are sold as of today 
+i) Create a view which lists out the bill_no, bill_date, cust_id, item_id, price, qty_sold, amount Create a view which lists the daily sales date wise for the last one week 
+
+
+*/
+
+
+/* a) Create the tables with the appropriate integrity constraints */
+
+create table Customer(cust_id integer, cust_name varchar(50));
+create table Item(item_id integer, item_name varchar(50), price integer);
+create table Sale(bill_no integer, bill_data date, cust_id integer, item_id integer, qty_sold integer);
+
+desc customer;
+desc item;
+desc sale;
+
+
+/* b) Insert around 10 records in each of the tables */
+
+insert into Customer(cust_id, cust_name)values(1, 'Ram');
+insert into Item(item_id, item_name, price)values(101, 'Monitor', 10000);
+insert into Sale(bill_no, bill_data, cust_id, item_id, qty_sold)values(201, to_date('29/11/2021', 'DD/MM/YYYY'), 1, 101, 1);
+
+insert into Customer(cust_id, cust_name)values(2, 'Lakshman');
+insert into Item(item_id, item_name, price)values(102, 'CPU', 50000);
+insert into Sale(bill_no, bill_data, cust_id, item_id, qty_sold)values(202, to_date('29/11/2021', 'DD/MM/YYYY'), 2, 102, 1);
+
+insert into Customer(cust_id, cust_name)values(3, 'Shiva');
+insert into Item(item_id, item_name, price)values(103, 'Motherboard', 4000);
+insert into Sale(bill_no, bill_data, cust_id, item_id, qty_sold)values(203, to_date('29/11/2021', 'DD/MM/YYYY'), 3, 103, 3);
+
+insert into Customer(cust_id, cust_name)values(4, 'Ben');
+insert into Item(item_id, item_name, price)values(104, 'Power system', 1000);
+insert into Sale(bill_no, bill_data, cust_id, item_id, qty_sold)values(204, to_date('29/11/2021', 'DD/MM/YYYY'), 4, 104, 1);
+
+insert into Customer(cust_id, cust_name)values(5, 'Gwen');
+insert into Item(item_id, item_name, price)values(105, 'Coolant', 3000);
+insert into Sale(bill_no, bill_data, cust_id, item_id, qty_sold)values(205, to_date('29/11/2021', 'DD/MM/YYYY'), 5, 105, 1);
+
+insert into Customer(cust_id, cust_name)values(6, 'Max');
+insert into Item(item_id, item_name, price)values(106, 'Keyboard', 1000);
+insert into Sale(bill_no, bill_data, cust_id, item_id, qty_sold)values(206, to_date('29/11/2021', 'DD/MM/YYYY'), 6, 106, 1);
+
+insert into Customer(cust_id, cust_name)values(7, 'Kevin');
+insert into Item(item_id, item_name, price)values(107, 'Mouse', 700);
+insert into Sale(bill_no, bill_data, cust_id, item_id, qty_sold)values(207, to_date('29/11/2021', 'DD/MM/YYYY'), 7, 107, 3);
+
+insert into Customer(cust_id, cust_name)values(8, 'Azmuth');
+insert into Item(item_id, item_name, price)values(108, 'Intel Processor i9', 60000);
+insert into Sale(bill_no, bill_data, cust_id, item_id, qty_sold)values(208, to_date('30/11/2021', 'DD/MM/YYYY'), 8, 108, 10);
+
+insert into Customer(cust_id, cust_name)values(9, 'Phil');
+insert into Item(item_id, item_name, price)values(109, 'Electrostatic gun', 9000);
+insert into Sale(bill_no, bill_data, cust_id, item_id, qty_sold)values(209, to_date('28/11/2021', 'DD/MM/YYYY'), 9, 109, 1);
+
+insert into Customer(cust_id, cust_name)values(10, 'John');
+insert into Item(item_id, item_name, price)values(1010, 'Speakers', 40000);
+insert into Sale(bill_no, bill_data, cust_id, item_id, qty_sold)values(2010, to_date('26/11/2021', 'DD/MM/YYYY'), 10, 1010, 1);
+
+/* c) List all the bills for the current date with the customer names and item numbers */
+
+ select c.cust_id, c.cust_name from customer c, item i, sale s where c.cust_id=s.cust_id and i.item_id=s.item_id and s.bill_data=to_date('29/11/2021', 'dd/mm/yyyy');
+
+/* d) List the total Bill details with the quantity sold, price of the item and the final amount */
+
+-- "Name" in quotes will show that particular name to that column
+
+select s.qty_sold, i.price, s.qty_sold*i.price "final amount" from item i, sale s where i.item_id = s.item_id;
+
+--select qty_sold.sale, price.item, price.item*qty_sold.item "final_amount" from item left join sale on item.item_id=sale.item_id;
+
+/* e) List the details of the customer who have bought a product which has a price>200 */
+
+select c.cust_id, c.cust_name from customer c, item i, sale s where i.price > 700 and c.cust_id=s.cust_id and i.item_id=s.item_id;
+
+/* f) Give a count of how many products have been bought by each customer */
+
+select cust_id, qty_sold from sale;
+
+/* g) Give a list of products bought by a customer having cust_id as 5  */
+
+select item_name from customer c, item i, sale s where c.cust_id=5 and i.item_id = s.item_id and c.cust_id = s.cust_id;
+
+/* h) List the item details which are sold as of today  */
+
+select i.item_id, i.item_name from item i, sale s where i.item_id = s.item_id and s.bill_data = to_date('29/11/2021', 'dd/mm/yyyy');
+
+/* i) Create a view which lists out the bill_no, bill_date, cust_id, item_id, price, qty_sold, amount */
+
+create view custv as (select s.bill_no, s.bill_data, s.cust_id, i.item_id, i.price, s.qty_sold, i.price * s.qty_sold as Amount from item i, sale s where i.item_id = s.item_id) with read only;
+
+/* Create a view which lists the daily sales date wise for the last one week  */
+
+create view custsales as select * from sale where to_number(to_char(bill_data, 'dd')) > 26 order by bill_data;
+
+
+
+--- select * from customer order by cust_id;
+--- select * from item order by item_id;
+--- select * from sale order by cust_id;
+
+-- drop table customer;
+-- drop table item;
+-- drop table sale;
+

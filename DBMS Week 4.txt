@@ -1,0 +1,141 @@
+/*
+
+WEEK 4:
+
+Database Schema for a Video Library scenario
+Customer(cust_no: integer,cust_name: string)
+Membership(Mem_no: integer, cust_no: integer)
+Cassette(cass_no:integer, cass_name:string, Language: String)
+Iss_rec(iss_no: integer, iss_date: date, mem_no: integer, cass_no: integer) 
+
+For the above schema, perform the following
+
+a) Create the tables with the appropriate integrity constraints
+b) Insert around 10 records in each of the tables
+c) List all the customer names with their membership numbers
+d) List all the issues for the current date with the customer names and cassette names
+e) List the details of the customer who has borrowed the cassette whose title is " The Legend"
+f) Give a count of how many cassettes have been borrowed by each customer
+g) Give a list of book which has been taken by the student with mem_no as 5
+h) List the cassettes issues for today
+i) Create a view which lists outs the iss_no. iss_date, cust_name, cass_name
+j) Create a view which lists issues-date wise for the last one week 
+
+*/
+
+
+
+/* a) Create the tables with the appropriate integrity constraints */
+
+create table customer(cust_no integer primary key, cust_name varchar(40));
+create table membership(mem_no integer, cust_no integer);
+create table cassette(cass_no int, cass_name varchar(40), language varchar(40));
+create table iss_rec(iss_no integer, iss_date date, mem_no int, cass_no int);
+
+desc customer;
+desc membership;
+desc cassette;
+desc iss_rec;
+
+/* b) Insert around 10 records in each of the tables */
+
+insert into customer(cust_no, cust_name) values (1, 'Ram');
+insert into membership(mem_no, cust_no) values (1, 1);
+insert into cassette(cass_no, cass_name, language) values (1001, 'Ala Vaikuntapuramlo', 'Telugu');
+insert into iss_rec(iss_no, iss_date, mem_no, cass_no) values (2001, to_date('19/05/2021', 'dd/mm/yyyy'), 1, 1001);
+
+insert into customer(cust_no, cust_name) values (2, 'Lakshman');
+insert into membership(mem_no, cust_no) values (2, 2);
+insert into cassette(cass_no, cass_name, language) values (1002, 'My World', 'English');
+insert into iss_rec(iss_no, iss_date, mem_no, cass_no) values (2002, to_date('18/05/2021', 'dd/mm/yyyy'), 2, 1002);
+
+insert into customer(cust_no, cust_name) values (3, 'Shiva');
+insert into membership(mem_no, cust_no) values (3, 3);
+insert into cassette(cass_no, cass_name, language) values (1003, 'The Legend', 'English');
+insert into iss_rec(iss_no, iss_date, mem_no, cass_no) values (2003, to_date('15/05/2021', 'dd/mm/yyyy'), 3, 1003);
+
+insert into customer(cust_no, cust_name) values (4, 'Abdul');
+insert into membership(mem_no, cust_no) values (4, 4);
+insert into cassette(cass_no, cass_name, language) values (1004, 'James Bond', 'English');
+insert into iss_rec(iss_no, iss_date, mem_no, cass_no) values (2004, to_date('16/05/2021', 'dd/mm/yyyy'), 4, 1004);
+
+insert into customer(cust_no, cust_name) values (5, 'John');
+insert into membership(mem_no, cust_no) values (5, 5);
+insert into cassette(cass_no, cass_name, language) values (1005, 'Arya', 'Telugu');
+insert into iss_rec(iss_no, iss_date, mem_no, cass_no) values (2005, to_date('19/03/2021', 'dd/mm/yyyy'), 5, 1005);
+
+insert into customer(cust_no, cust_name) values (6, 'James');
+insert into membership(mem_no, cust_no) values (6, 6);
+insert into cassette(cass_no, cass_name, language) values (1006, 'Padara', 'Telugu');
+insert into iss_rec(iss_no, iss_date, mem_no, cass_no) values (2006, to_date('20/04/2021', 'dd/mm/yyyy'), 6, 1006);
+
+insert into customer(cust_no, cust_name) values (7, 'Chistopher');
+insert into membership(mem_no, cust_no) values (7, 7);
+insert into cassette(cass_no, cass_name, language) values (1007, 'Dheeme', 'Hindi');
+insert into iss_rec(iss_no, iss_date, mem_no, cass_no) values (2007, to_date('18/02/2021', 'dd/mm/yyyy'), 7, 1007);
+
+insert into customer(cust_no, cust_name) values (8, 'George');
+insert into membership(mem_no, cust_no) values (8, 8);
+insert into cassette(cass_no, cass_name, language) values (1008, 'Hello', 'English');
+insert into iss_rec(iss_no, iss_date, mem_no, cass_no) values (2008, to_date('16/01/2021', 'dd/mm/yyyy'), 8, 1008);
+
+insert into customer(cust_no, cust_name) values (9, 'Ben');
+insert into membership(mem_no, cust_no) values (9, 9);
+insert into cassette(cass_no, cass_name, language) values (1009, 'Say My Name', 'English');
+insert into iss_rec(iss_no, iss_date, mem_no, cass_no) values (2009, to_date('10/05/2021', 'dd/mm/yyyy'), 9, 1009);
+
+insert into customer(cust_no, cust_name) values (10, 'Gwen');
+insert into membership(mem_no, cust_no) values (10, 10);
+insert into cassette(cass_no, cass_name, language) values (10010, 'Pokiri', 'Telugu');
+insert into iss_rec(iss_no, iss_date, mem_no, cass_no) values (20010, to_date('11/05/2021', 'dd/mm/yyyy'), 10, 10010);
+
+/* c) List all the customer names with their membership numbers */
+
+select c.cust_name , m.mem_no from customer c, membership m where c.cust_no = m.cust_no;
+
+/* d) List all the issues for the current date with the customer names and cassette names */
+
+select c.cust_name, cs.cass_name from customer c, cassette cs, iss_rec i, membership m where cs.cass_no=i.cass_no and m.mem_no=i.mem_no and i.mem_no=m.mem_no and c.cust_no=m.cust_no and i.iss_date = to_date('19/05/2021', 'dd/mm/yyyy');
+
+/* e) List the details of the customer who has borrowed the cassette whose title is " The Legend" */
+
+select c.cust_no, c.cust_name from customer c, cassette cs, iss_rec i, membership m where cs.cass_no=i.cass_no and m.mem_no=i.mem_no and i.mem_no=m.mem_no and c.cust_no=m.cust_no and lower(cs.cass_name) = 'the legend';
+
+/* f) Give a count of how many cassettes have been borrowed by each customer */
+
+select c.cust_name, count(cust_name) as Cassete_Count from customer c, cassette cs, iss_rec i, membership m where cs.cass_no=i.cass_no and m.mem_no=i.mem_no and i.mem_no=m.mem_no and c.cust_no=m.cust_no group by cust_name;
+
+/* g) Give a list of book which has been taken by the student with mem_no as 5 */
+
+select cust_name, count(cust_name) as Cassete_Count from customer c, cassette cs, iss_rec i, membership m where cs.cass_no=i.cass_no and m.mem_no=i.mem_no and i.mem_no=m.mem_no and c.cust_no=m.cust_no and m.mem_no=5 group by cust_name;
+
+/* h) List the cassettes issues for today */
+
+select i.iss_no, cs.cass_no, cs.cass_name from customer c, cassette cs, iss_rec i, membership m where cs.cass_no=i.cass_no and m.mem_no=i.mem_no and i.mem_no=m.mem_no and c.cust_no=m.cust_no and i.iss_date = '19-MAY-2021';
+
+/* i) Create a view which lists outs the iss_no. iss_date, cust_name, cass_name */
+
+create view casv as select i.iss_no, i.iss_date, c.cust_name, cs.cass_name from customer c, cassette cs, iss_rec i, membership m where cs.cass_no=i.cass_no and m.mem_no=i.mem_no and i.mem_no=m.mem_no and c.cust_no=m.cust_no;
+
+/* j) Create a view which lists issues-date wise for the last one week */
+
+create view isv as select iss_date ,iss_no from iss_rec where to_number(to_char(iss_date, 'mm')) >= 05 and to_number(to_char(iss_date, 'dd')) > 11 order by iss_date;
+
+
+
+
+
+
+
+
+
+
+
+
+column cass_name format a20
+column language format a10
+
+select * from customer;
+select * from membership;
+select * from cassette;
+select * from iss_rec;

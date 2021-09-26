@@ -1,0 +1,140 @@
+/*
+
+WEEK 5
+
+Database Schema for a student-Lab scenario
+Student(stud_no: integer, stud_name: string, class: string)
+Class(class: string,descrip: string)
+Lab(mach_no: integer, Lab_no: integer, description: String)
+Allotment(Stud_no: Integer, mach_no: integer, dayof week: string)
+
+For the above schema, perform the following
+
+a) Create the tables with the appropriate integrity constraints
+b) Insert around 10 records in each of the tables
+c) List all the machine allotments with the student names, lab and machine numbers
+d) List the total number of lab allotments day wise
+e) Give a count of how many machines have been allocated to the 'CSIT' class
+f) Give a machine allotment etails of the stud_no 5 with his personal and class details
+g) Count for how many machines have been allocatedinLab_no 1 for the day of the week as "Monday"
+h) How many students class wise have allocated machines in the labs
+i) Create a view which lists out the stud_no, stud_name, mach_no, lab_no, dayofweek
+j) Create a view which lists the machine allotment details for 'Thursday". 
+
+*/
+
+/* a) Create the tables with the appropriate integrity constraints */
+
+create table Student(stud_no int primary key, stud_name varchar(40), class varchar(10));
+create table Class(class varchar(10), descrip varchar(40));
+create table Lab(mach_no int, lab_no int, description varchar(40));
+create table Allotment(stud_no int, mach_no int, dayofweek varchar(10));
+
+desc student;
+desc class;
+desc lab;
+desc allotment;
+
+/* b) Insert around 10 records in each of the tables */
+
+insert into student(stud_no, stud_name, class)values(1, 'Ram', 'CSE');
+insert into class(class, descrip)values('CSE', 'Computer Science And Engineering');
+insert into lab(mach_no, lab_no, description)values(1, 1, 'Computer');
+insert into allotment(stud_no, mach_no, dayofweek)values(1, 1, 'Monday');
+
+insert into student(stud_no, stud_name, class)values(2, 'Lakshman', 'IT');
+insert into class(class, descrip)values('IT', 'Information Technology');
+insert into lab(mach_no, lab_no, description)values(2, 2, 'Computer');
+insert into allotment(stud_no, mach_no, dayofweek)values(2, 2, 'Tuesday');
+
+insert into student(stud_no, stud_name, class)values(3, 'Shiva', 'ECE');
+insert into class(class, descrip)values('ECE', 'Electronics And Communications Engineering');
+insert into lab(mach_no, lab_no, description)values(3, 3, 'Circuits');
+insert into allotment(stud_no, mach_no, dayofweek)values(3, 3, 'Wednesday');
+
+insert into student(stud_no, stud_name, class)values(4, 'Abdul', 'ME');
+insert into class(class, descrip)values('ME', 'Mechanical Engineering');
+insert into lab(mach_no, lab_no, description)values(4, 4, 'Machines');
+insert into allotment(stud_no, mach_no, dayofweek)values(4, 4, 'Thursday');
+
+insert into student(stud_no, stud_name, class)values(5, 'Gwen', 'CSE');
+insert into class(class, descrip)values('CSE', 'Computer Science And Engineering');
+insert into lab(mach_no, lab_no, description)values(5, 5, 'Computer');
+insert into allotment(stud_no, mach_no, dayofweek)values(5, 5, 'Saturday');
+
+insert into student(stud_no, stud_name, class)values(6, 'John', 'EEE');
+insert into class(class, descrip)values('EEE', 'Electronics And Electrical Engineering');
+insert into lab(mach_no, lab_no, description)values(6, 6, 'Electronics');
+insert into allotment(stud_no, mach_no, dayofweek)values(6, 6, 'Monday');
+
+insert into student(stud_no, stud_name, class)values(7, 'James', 'CSIT');
+insert into class(class, descrip)values('CSIT', 'CS Information Technology');
+insert into lab(mach_no, lab_no, description)values(7, 7, 'Computer');
+insert into allotment(stud_no, mach_no, dayofweek)values(7, 7, 'Friday');
+
+insert into student(stud_no, stud_name, class)values(8, 'Warren', 'CE');
+insert into class(class, descrip)values('CE', 'Chemical Engineering');
+insert into lab(mach_no, lab_no, description)values(8, 8, 'Chemicals');
+insert into allotment(stud_no, mach_no, dayofweek)values(8, 8, 'Tuesday');
+
+insert into student(stud_no, stud_name, class)values(9, 'Warren', 'AI');
+insert into class(class, descrip)values('AI', 'Artificial Intelligence');
+insert into lab(mach_no, lab_no, description)values(9, 9, 'Intelligence');
+insert into allotment(stud_no, mach_no, dayofweek)values(9, 9, 'Thursday');
+
+insert into student(stud_no, stud_name, class)values(10, 'Ben', 'CSE');
+insert into class(class, descrip)values('CSE', 'Computer Science And Engineering');
+insert into lab(mach_no, lab_no, description)values(10, 10, 'Computer');
+insert into allotment(stud_no, mach_no, dayofweek)values(10, 10, 'Thursday');
+
+/* c) List all the machine allotments with the student names, lab and machine numbers */
+
+select s.stud_no, s.stud_name, l.lab_no, l.mach_no from student s, lab l, allotment a where s.stud_no=a.stud_no and l.mach_no=a.mach_no;
+
+/* d) List the total number of lab allotments day wise */
+
+select l.lab_no, l.mach_no, l.description, a.dayofweek from lab l, allotment a where l.mach_no=a.mach_no order by a.dayofweek;
+
+/* e) Give a count of how many machines have been allocated to the 'CSIT' class */
+
+select count(a.mach_no) from student s, allotment a where s.class='CSIT';
+
+/* f) Give a machine allotment details of the stud_no 5 with his personal and class details */
+
+select s.stud_no, s.stud_name, s.class, a.mach_no, a.dayofweek from student s, allotment a where s.stud_no=a.stud_no and s.stud_no = 5;
+
+/* g) Count for how many machines have been allocated in Lab_no 1 for the day of the week as "Monday" */
+
+select a.mach_no from allotment a, lab l where a.mach_no=l.mach_no and l.lab_no=1 and a.dayofweek='Monday';
+
+/* h) How many students class wise have allocated machines in the labs */
+
+select count(s.stud_no) as Allocated_Labs, s.class from student s, allotment a where s.stud_no=a.stud_no group by s.class;
+
+/* i) Create a view which lists out the stud_no, stud_name, mach_no, lab_no, dayofweek */
+
+create view detailsv as select s.stud_no, s.stud_name, l.mach_no, l.lab_no from student s, lab l, allotment a where s.stud_no=a.stud_no and l.mach_no=a.mach_no;
+select * from detailsv;
+
+/* j) Create a view which lists the machine allotment details for 'Thursday". */
+
+create view allotmenttv as select * from allotment where dayofweek='Thursday';
+select * from allotmenttv;
+
+
+
+
+
+
+
+
+
+
+
+
+column stud_name format a10
+
+select * from student;
+select * from class;
+select * from lab;
+select * from allotment;

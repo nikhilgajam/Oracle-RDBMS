@@ -1,0 +1,140 @@
+/*
+
+WEEK 3:
+
+Database Schema for a Employee-pay scenario
+employee(emp_id : integer, emp_name: string)
+department(dept_id: integer, dept_name:string)
+paydetails(emp_id : integer,dept_id: integer, basic: integer, deductions: integer, additions: integer, DOJ: date)
+payroll(emp_id : integer, pay_date: date) 
+
+For the above schema, perform the following
+
+a) Create the tables with the appropriate integrity constraints
+b) Insert around 10 records in each of the tables
+c) List the employee details department wise
+d) List all the employee names who joined after particular date
+e) List the details of employees whose basic salary is between 10,000 and 20,000
+f) Give a count of how many employees are working in each department
+g) Give a names of the employees whose netsalary>10,000
+h) List the details for an employee_id=5
+i) Create a view which lists out the emp_name, department, basic, dedeuctions, netsalary
+j) Create a view which lists the emp_name and his netsalary 
+
+*/
+
+
+
+
+/* a) Create the tables with the appropriate integrity constraints */
+
+create table employee(emp_id integer primary key, emp_name varchar(40));
+create table department(dept_id int, dept_name varchar(10));
+create table paydetails(emp_id int primary key, dept_id int, basic int, deductions int, additions int, DOJ date);
+create table payroll(emp_id int, pay_date date);
+
+
+desc employee;
+desc department;
+desc paydetails;
+desc payroll;
+
+/* b) Insert around 10 records in each of the tables */
+
+insert into employee(emp_id, emp_name) values (1, 'Ram');
+insert into department(dept_id, dept_name) values (20, 'HR');
+insert into paydetails(emp_id, dept_id, basic, deductions, additions, DOJ) values (1, 20, 100000, 10000, 5000, to_date('11/04/2021', 'dd/mm/yyyy'));
+insert into payroll(emp_id, pay_date) values (1, to_date('12/05/2021', 'dd/mm/yyyy'));
+
+insert into employee(emp_id, emp_name) values (2, 'Lakshman');
+insert into department(dept_id, dept_name) values (30, 'EMP');
+insert into paydetails(emp_id, dept_id, basic, deductions, additions, DOJ) values (2, 30,  50000, 1000, 500, to_date('10/04/2021', 'dd/mm/yyyy'));
+insert into payroll(emp_id, pay_date) values (2, to_date('11/05/2021', 'dd/mm/yyyy'));
+
+insert into employee(emp_id, emp_name) values (3, 'Shiva');
+insert into department(dept_id, dept_name) values (50, 'MANG');
+insert into paydetails(emp_id, dept_id, basic, deductions, additions, DOJ) values (3, 50, 60000, 5000, 1000, to_date('01/01/2021', 'dd/mm/yyyy'));
+insert into payroll(emp_id, pay_date) values (3, to_date('21/05/2021', 'dd/mm/yyyy'));
+
+insert into employee(emp_id, emp_name) values (4, 'John');
+insert into department(dept_id, dept_name) values (60, 'INTERN');
+insert into paydetails(emp_id, dept_id, basic, deductions, additions, DOJ) values (4, 60, 9000, 50, 100, to_date('10/02/2020', 'dd/mm/yyyy'));
+insert into payroll(emp_id, pay_date) values (4, to_date('18/05/2021', 'dd/mm/yyyy'));
+
+insert into employee(emp_id, emp_name) values (5, 'Ben');
+insert into department(dept_id, dept_name) values (40, 'DIREC');
+insert into paydetails(emp_id, dept_id, basic, deductions, additions, DOJ) values (5, 40, 900000, 100000, 60000, to_date('11/03/2021', 'dd/mm/yyyy'));
+insert into payroll(emp_id, pay_date) values (5, to_date('16/05/2021', 'dd/mm/yyyy'));
+
+insert into employee(emp_id, emp_name) values (6, 'Gwen');
+insert into department(dept_id, dept_name) values (50, 'MANG');
+insert into paydetails(emp_id, dept_id, basic, deductions, additions, DOJ) values (6, 50, 70000, 1000, 600, to_date('11/03/2021', 'dd/mm/yyyy'));
+insert into payroll(emp_id, pay_date) values (6, to_date('13/05/2021', 'dd/mm/yyyy'));
+
+insert into employee(emp_id, emp_name) values (7, 'Max');
+insert into department(dept_id, dept_name) values (10, 'CEO');
+insert into paydetails(emp_id, dept_id, basic, deductions, additions, DOJ) values (7, 10, 1000000, 100000, 10000, to_date('15/03/1995', 'dd/mm/yyyy'));
+insert into payroll(emp_id, pay_date) values (7, to_date('15/05/2021', 'dd/mm/yyyy'));
+
+insert into employee(emp_id, emp_name) values (8, 'Phil');
+insert into department(dept_id, dept_name) values (30, 'EMP');
+insert into paydetails(emp_id, dept_id, basic, deductions, additions, DOJ) values (8, 30, 100000, 10000, 5000, to_date('11/04/2011', 'dd/mm/yyyy'));
+insert into payroll(emp_id, pay_date) values (8, to_date('19/05/2021', 'dd/mm/yyyy'));
+
+insert into employee(emp_id, emp_name) values (9, 'Abdul');
+insert into department(dept_id, dept_name) values (50, 'MANG');
+insert into paydetails(emp_id, dept_id, basic, deductions, additions, DOJ) values (9, 50, 100000, 10000, 1000, to_date('28/03/2010', 'dd/mm/yyyy'));
+insert into payroll(emp_id, pay_date) values (9, to_date('21/05/2021', 'dd/mm/yyyy'));
+
+insert into employee(emp_id, emp_name) values (10, 'James');
+insert into department(dept_id, dept_name) values (60, 'INTERN');
+insert into paydetails(emp_id, dept_id, basic, deductions, additions, DOJ) values (10, 60, 8000, 100, 1000, to_date('21/01/2011', 'dd/mm/yyyy'));
+insert into payroll(emp_id, pay_date) values (10, to_date('29/05/2021', 'dd/mm/yyyy'));
+
+/* c) List the employee details department wise */
+
+select distinct e.emp_id, e.emp_name, d.dept_id, d.dept_name, p.basic from employee e, department d, paydetails p where d.dept_id = p.dept_id and e.emp_id = p.emp_id order by d.dept_name;
+
+/* d) List all the employee names who joined after particular date */
+
+select emp_name from employee e, payroll pr where e.emp_id = pr.emp_id and pr.pay_date > to_date('15/05/2021', 'dd/mm/yyyy');
+
+/* e) List the details of employees whose basic salary is between 10,000 and 20,000 */
+
+select e.emp_id, e.emp_name, p.basic as Basic_Salary from employee e, paydetails p where e.emp_id = p.emp_id and p.basic BETWEEN 10000 AND 80000;
+
+/* f) Give a count of how many employees are working in each department */
+
+select dept_name, count(dept_name) from department group by dept_name;
+
+/* g) Give a names of the employees whose netsalary>10,000 */
+
+select e.emp_name from employee e, paydetails p where e.emp_id = p.emp_id and p.basic+p.additions-p.deductions > 10000;
+
+/* h) List the details for an employee_id=5 */
+
+select distinct e.emp_id, e.emp_name, d.dept_id, d.dept_name, p.basic from employee e, department d, paydetails p where d.dept_id = p.dept_id and e.emp_id = p.emp_id and e.emp_id = 5;
+
+/* i) Create a view which lists out the emp_name, department, basic, dedeuctions, netsalary */
+
+create view empv as select distinct e.emp_name, d.dept_name, p.basic, p.deductions, p.basic+p.additions-p.deductions as Net_Salary from employee e, paydetails p, department d where p.emp_id = e.emp_id and d.dept_id = p.dept_id;
+
+/* j) Create a view which lists the emp_name and his netsalary */
+
+create view empsalv as select e.emp_name, p.basic+p.additions-p.deductions as Net_salary from employee e, paydetails p where e.emp_id = p.emp_id;
+
+
+
+
+
+
+
+select * from employee;
+select * from department;
+select * from paydetails;
+select * from payroll;
+
+drop table employee;
+drop table department;
+drop table paydetails;
+drop table payroll;

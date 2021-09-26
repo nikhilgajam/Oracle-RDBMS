@@ -1,0 +1,134 @@
+/* 
+
+WEEK 2
+
+Database Schema for a Student Library scenario
+Student(Stud_no : integer, Stud_name: string)
+Membership(Mem_no: integer,Stud_no: integer)
+Book(book_no: integer, book_name:string, author: string)
+Iss_rec(iss_no:integer, iss_date: date, Mem_no: integer, book_no: integer)
+
+For the above schema, perform the following—
+
+a) Create the tables with the appropriate integrity constraints
+b) Insert around 10 records in each of the tables
+c) List all the student names with their membership numbers 
+d) List all the issues for the current date with student and Book names
+e) List the details of students who borrowed book whose author is CJDATE
+f) Give a count of how many books have been bought by each student
+g) Give a list of books taken by student with stud_no as 5
+h) List the book details which are issued as of today
+i) Create a view which lists out the iss_no, iss _date, stud_name, book name
+j) Create a view which lists the daily issues-date wise for the last one week
+
+*/
+
+
+
+/* a) Create the tables with the appropriate integrity constraints */
+
+create table student (stud_no int primary key, stud_name varchar(20));
+create table membership(mem_no int primary key, stud_no int);
+create table book(book_no int primary key, book_name varchar(40), author varchar(25));
+create table iss_rec(iss_no int primary key, iss_date date, mem_no int, book_no int);
+
+desc student;
+desc membership;
+desc book;
+desc iss_rec;
+
+
+/* b) Insert around 10 records in each of the tables */
+
+insert into student(stud_no, stud_name)values(1, 'Ram');
+insert into membership(mem_no, stud_no)values(1, 1);
+insert into book(book_no, book_name, author)values(101, 'A Knight Of The Seven Kingdoms', 'G.R.R.Martin');
+insert into iss_rec(iss_no, iss_date, mem_no, book_no)values(1001, to_date('05/05/2021', 'DD/MM/YYYY'), 1, 101);
+
+insert into student(stud_no, stud_name)values(2, 'Dorathy');
+insert into membership(mem_no, stud_no)values(2, 2);
+insert into book(book_no, book_name, author)values(102, 'A Game of Thrones', 'G.R.R.Martin');
+insert into iss_rec(iss_no, iss_date, mem_no, book_no)values(1002, to_date('01/05/2021', 'DD/MM/YYYY'), 2, 102);
+
+insert into student(stud_no, stud_name)values(3, 'James');
+insert into membership(mem_no, stud_no)values(3, 3);
+insert into book(book_no, book_name, author)values(103, 'A Clash Of Kings', 'G.R.R.Martin');
+insert into iss_rec(iss_no, iss_date, mem_no, book_no)values(1003, to_date('03/05/2021', 'DD/MM/YYYY'), 3, 103);
+
+insert into student(stud_no, stud_name)values(4, 'Rohit');
+insert into membership(mem_no, stud_no)values(4, 4);
+insert into book(book_no, book_name, author)values(104, 'A Storm Of Swords Vol 1', 'G.R.R.Martin');
+insert into iss_rec(iss_no, iss_date, mem_no, book_no)values(1004, to_date('07/05/2021', 'DD/MM/YYYY'), 4, 104);
+
+
+insert into student(stud_no, stud_name)values(5, 'Teja');
+insert into membership(mem_no, stud_no)values(5, 5);
+insert into book(book_no, book_name, author)values(105, 'A Storm Of Swords Vol 2', 'G.R.R.Martin');
+insert into iss_rec(iss_no, iss_date, mem_no, book_no)values(1005, to_date('01/01/2021', 'DD/MM/YYYY'), 5, 105);
+
+insert into student(stud_no, stud_name)values(6, 'John');
+insert into membership(mem_no, stud_no)values(6, 6);
+insert into book(book_no, book_name, author)values(106, 'A Dance Of Dragons Vol 1', 'G.R.R.Martin');
+insert into iss_rec(iss_no, iss_date, mem_no, book_no)values(1006, to_date('05/04/2021', 'DD/MM/YYYY'), 6, 106);
+
+insert into student(stud_no, stud_name)values(7, 'Ben');
+insert into membership(mem_no, stud_no)values(7,7);
+insert into book(book_no, book_name, author)values(107, 'A Feast Of Crows', 'G.R.R.Martin');
+insert into iss_rec(iss_no, iss_date, mem_no, book_no)values(1007, to_date('05/05/2021', 'DD/MM/YYYY'), 7, 107);
+
+insert into student(stud_no, stud_name)values(8, 'Larry');
+insert into membership(mem_no, stud_no)values(8, 8);
+insert into book(book_no, book_name, author)values(108, 'A Dance Of Dragons Vol 2', 'G.R.R.Martin');
+insert into iss_rec(iss_no, iss_date, mem_no, book_no)values(1008, to_date('03/03/2021', 'DD/MM/YYYY'), 8, 108);
+
+insert into student(stud_no, stud_name)values(9, 'Gwen');
+insert into membership(mem_no, stud_no)values(9, 9);
+insert into book(book_no, book_name, author)values(109, 'Wings Of Fire', 'A.P.J Abdul Kalaam');
+insert into iss_rec(iss_no, iss_date, mem_no, book_no)values(1009, to_date('04/01/2021', 'DD/MM/YYYY'), 9, 109);
+
+insert into student(stud_no, stud_name)values(10, 'Max');
+insert into membership(mem_no, stud_no)values(10, 10);
+insert into book(book_no, book_name, author)values(1010, 'Ignited Minds', 'A.P.J Abdul Kalaam');
+insert into iss_rec(iss_no, iss_date, mem_no, book_no)values(10010, to_date('05/05/2021', 'DD/MM/YYYY'), 10, 1010);
+
+/* c) List all the student names with their membership numbers */
+
+select s.stud_name, m.mem_no from student s, membership m where s.stud_no=m.stud_no;
+
+/* d) List all the issues for the current date with student and Book names */
+
+select b.book_name from book b, iss_rec i where b.book_no=i.book_no and i.iss_date = to_date('05/05/2021', 'dd/mm/yyyy');
+
+/* e) List the details of students who borrowed book whose author is CJDATE */
+
+select s.stud_no, s.stud_name from student s, membership m, book b, iss_rec i where s.stud_no = m.stud_no and b.book_no=i.book_no and i.mem_no=m.mem_no and b.author='A.P.J Abdul Kalaam';
+
+/* f) Give a count of how many books have been bought by each student */
+
+select s.stud_no, count(b.book_no) from student s, membership m, book b, iss_rec i where s.stud_no = m.stud_no and b.book_no=i.book_no and i.mem_no = m.mem_no group by s.stud_no;
+
+/* g) Give a list of books taken by student with stud_no as 5 */
+
+select b.book_name from student s, membership m, book b, iss_rec i where s.stud_no = m.stud_no and b.book_no=i.book_no and i.mem_no=m.mem_no and s.stud_no=5;
+
+/* h) List the book details which are issued as of today */
+
+select b.book_no, b.book_name, b.author from student s, membership m, book b, iss_rec i where s.stud_no = m.stud_no and b.book_no=i.book_no and i.mem_no = m.mem_no and i.iss_date=to_date('05/05/2021', 'dd/mm/yyyy');
+
+/* i) Create a view which lists out the iss_no, iss _date, stud_name, book name */
+
+create view bookv as select i.iss_no, i.iss_date, s.stud_name, b.book_name from iss_rec i, book b, student s, membership m where s.stud_no=m.stud_no and m.mem_no=i.mem_no and b.book_no=i.book_no;
+
+/* j) Create a view which lists the daily issues date wise for the last one week */
+
+create view booksv as select i.iss_no, i.iss_date, i.mem_no, i.book_no from iss_rec i where i.iss_date > to_date('28/04/2021', 'dd/mm/yyyy');
+
+
+
+select * from student;
+
+select * from membership;
+
+select * from book;
+
+select * from iss_rec;

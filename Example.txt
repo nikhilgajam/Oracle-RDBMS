@@ -1,0 +1,68 @@
+/*
+
+EXAMPLE
+
+Student(snum: integer, sname: string, major: string, level: string, age: integer)
+Class(name: string, meets at: time, room: string, fid: integer)
+Enrolled(snum: integer, cname: string)
+Faculty(fid: integer, fname: string, deptid: integer)
+
+The meaning of these relations is straightforward; for example, Enrolled has one record per student-
+
+class pair such that the student is enrolled in the class.
+
+Write the following queries in SQL. No duplicates should be printed in any of the answers.
+
+1. Find the names of all Juniors (Level = JR) who are enrolled in a class taught by I. Teach.
+2. Find the age of the oldest student who is either a History major or is enrolled in a course taught by I.Teach.
+3. Find the names of all classes that either meet in room R128 or have five or more students enrolled.
+4. Find the names of all students who are enrolled in two classes that meet at the same time.
+5. Find the names of faculty members who teach in every room in which some class is taught
+
+*/
+
+
+/* Creating tables */
+create table student(snum int, sname varchar(40), major varchar(10), lvl varchar(10), age int);
+create table class(name varchar(40), meets_at varchar(40), room varchar(10), fid int);
+create table enrolled(snum int references student(snum), cname varchar(40));
+create table faculty(fid int, fname varchar(40), deptid int);
+
+/* Inserting records */
+
+insert into student(snum, sname, major, lvl, age)values(1, 'Ram', 'Yes', 'SR', 21);
+insert into class(name, meets_at, room, fid)values('Java', '11 AM', 101, 1);
+insert into enrolled(snum, cname)values(1, 'Java');
+insert into faculty(fid, fname, deptid)values(1, 'I.Teach', 11);
+
+insert into student(snum, sname, major, lvl, age)values(2, 'Abdul', 'No', 'JR', 16);
+insert into class(name, meets_at, room, fid)values('C', '10 AM', 102, 2);
+insert into enrolled(snum, cname)values(2, 'C');
+insert into faculty(fid, fname, deptid)values(2, 'I.Teach', 22);
+
+/* selecting */
+
+select * from student;
+select * from class;
+select * from enrolled;
+select * from faculty;
+
+
+/* 1. Find the names of all Juniors (Level = JR) who are enrolled in a class taught by I. Teach. */
+SELECT deptid FROM Faculty WHERE fname = 'I.Teach';
+
+
+/* 2. Find the age of the oldest student who is either a History major or is enrolled in a course taught by I.Teach. */
+SELECT S.sname FROM Student S WHERE S.lvl = 'JR' ORDER BY S.age;
+
+
+/* 3. Find the names of all classes that either meet in room R128 or have five or more students enrolled. */
+SELECT COUNT(DISTINCT E.cname)FROM Enrolled E;
+
+
+/* 4. Find the names of all students who are enrolled in two classes that meet at the same time. */
+SELECT S.sname, S.major FROM Student S, Enrolled E WHERE S.snum = E.snum;
+
+
+/* 5. Find the names of faculty members who teach in every room in which some class is taught */
+SELECT COUNT(DISTINCT S.sname) FROM Student S, Enrolled E1, Enrolled E2 WHERE E1.snum = E2.snum AND E1.snum <> E2.snum AND S.snum = E1.snum;

@@ -1,0 +1,36 @@
+-- create table students(hno integer, name varchar(20), age int);
+
+-- insert into students(hno, name, age) values(1, 'Ram', 18);
+-- insert into students(hno, name, age) values(2, 'Abdul', 19);
+-- insert into students(hno, name, age) values(3, 'Lakshman', 18);
+-- insert into students(hno, name, age) values(4, 'Shiva', 18);
+-- insert into students(hno, name, age) values(5, 'Ben', 18);
+-- insert into students(hno, name, age) values(6, 'Gwen', 18);
+
+-- delete students where hno=1;
+-- update students set age=21 where name='Ben';
+
+-- alter table students add(gender char(1));
+-- alter table students modify(gender number(8, 2));
+-- alter table students modify(gender varchar(10))
+-- alter table students drop(gender);
+
+-- select * from students where age>18;
+
+-- alter table students add(m1 int, m2 int, total int);
+
+-- update students set m1=100, m2=100 where name = 'Ram';
+-- update students set m1=100, m2=99 where name = 'Abdul';
+-- update students set m1=99, m2=99 where name = 'Lakshman';
+-- update students set m1=98, m2=99 where name = 'Shiva';
+-- update students set m1=96, m2=98 where name = 'Ben';
+-- update students set m1=99, m2=100 where name = 'Gwen';
+
+-- update students set total=m1+m2 where name = 'Ram';
+-- update students set total=m1+m2 where name = 'Abdul';
+-- update students set total=m1+m2 where name = 'Lakshman';
+-- update students set total=m1+m2 where name = 'Shiva';
+-- update students set total=m1+m2 where name = 'Ben';
+-- update students set total=m1+m2 where name = 'Gwen';
+
+select * from students;
